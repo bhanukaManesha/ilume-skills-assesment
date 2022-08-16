@@ -11,7 +11,7 @@ export const findDogById = async (dogid:string) => {
         path: 'breed',
         model: 'Breed',
         select: 'name'
-    })    
+    })
     .populate({
         path: 'owner',
         model: 'User',
@@ -22,10 +22,10 @@ export const findDogById = async (dogid:string) => {
 // Create a dog
 export const createDog = async (name: string, dob: Date, breed: any, owner : any) => {
     const dog: any = await Dog.create({
-        name: name,
-        dob: dob,
-        breed: breed,
-        owner: owner
+        name,
+        dob,
+        breed,
+        owner
     });
 
     return dog
@@ -34,7 +34,7 @@ export const createDog = async (name: string, dob: Date, breed: any, owner : any
 
 // update Dog
 export const updateDog = async (name: string, dob: Date, breed: any, dog:any) => {
-    
+
     dog.name = name;
     dog.dob = dob;
     dog.breed = breed;
@@ -57,13 +57,13 @@ export const getDogsByOwnerID = async (ownerid: any) => {
             path: 'breed',
             model: 'Breed',
             select: 'name'
-        })    
+        })
         .populate({
             path: 'owner',
             model: 'User',
             select: 'email'
         })
-                
+
 }
 
 

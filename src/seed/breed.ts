@@ -20,10 +20,10 @@ const breeds = [
 ]
 
 // save your data
-breeds.map(async (breed, idx) => { 
+breeds.map(async (breed, idx) => {
     try {
-        breed.save(); 
+        breed.save();
     } catch {
         console.log(`${breed.name} already exists`)
-    }    
+    }
 });

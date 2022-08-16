@@ -12,10 +12,10 @@ router.get("", verifyToken, async (req: any, res: any) => {
 })
 
 router.get("/id/:dogid", verifyToken, async (req: any, res: any) => {
-    
+
     const dogid = req.params.dogid
     try {
-        const dog = await findDogById(dogid)    
+        const dog = await findDogById(dogid)
 
         if (dog) {
             return res.status(200).json(dog)
@@ -26,7 +26,7 @@ router.get("/id/:dogid", verifyToken, async (req: any, res: any) => {
     } catch {
         return res.status(400).send("Dog not found");
     }
-    
+
 })
 
 
@@ -36,7 +36,7 @@ router.post("/", verifyToken, async (req: any, res) => {
 
         // Get user input
         const { name, dob, breed } = req.body;
-        
+
         // validate user input
         if (!(name && dob && breed)) {
             return res.status(400).send("All input is required");
@@ -73,7 +73,7 @@ router.post("/", verifyToken, async (req: any, res) => {
         const dog = await createDog(name, dateOfBirth, breed, owner)
 
         return res.status(201).json(dog)
-        
+
         }
         catch (e) {
             console.log(e)
@@ -83,7 +83,7 @@ router.post("/", verifyToken, async (req: any, res) => {
 
 
 router.put("/id/:dogid", verifyToken, async (req: any, res: any) => {
-    
+
     try {
         // get request data
         const owner = await findUser(req.user.email)
@@ -146,7 +146,7 @@ router.patch("/id/:dogid", verifyToken, async (req: any, res: any) => {
         if (!oldDog) {
             return res.status(400).send("Dog id does not exist");
         }
-        
+
         if (oldDog.owner.id !== owner.id) {
             return res.status(400).send("Dog does not exist");
         }
@@ -188,7 +188,7 @@ router.patch("/id/:dogid", verifyToken, async (req: any, res: any) => {
 
 
 router.delete("/id/:dogid", verifyToken, async (req: any, res: any) => {
-    
+
     try {
         const owner = await findUser(req.user.email)
         const dogid = req.params.dogid
