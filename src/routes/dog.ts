@@ -83,71 +83,17 @@ router.post("/", verifyToken, async (req: any, res) => {
 
 router.put("/id/:dogid", verifyToken, async (req: any, res: any) => {
     
-    const owner = await findUser(req.user.email)
-    const dogid = req.params.dogid
+    try {
+        const owner = await findUser(req.user.email)
+        const dogid = req.params.dogid
 
-    const { name, dob, breed } = req.body;
+        const { name, dob, breed } = req.body;
 
-    // validate user input
-    if (!(name && dob && breed)) {
-        return res.status(400).send("All input is required");
-    }
+        // validate user input
+        if (!(name && dob && breed)) {
+            return res.status(400).send("All input is required");
+        }
 
-    // validate date
-    const dateOfBirth = new Date(dob);
-    if (!(dateOfBirth instanceof Date && !isNaN(dateOfBirth.valueOf()))) {
-        return res.status(400).send("Incorect dob format: required format - yyyy-mm-dd");
-    }
-    if (dateOfBirth.valueOf() > Date.now()) {
-        return res.status(400).send("dob cannot be in the future");
-    }
-
-    // validate breed
-    const dogBreed = await Breed.findById(breed)
-    if (!dogBreed) {
-        return res.status(400).send("Incorect breed");
-    }
-
-    // check if already in db
-    const oldDog = await findDogById(dogid)
-    if (!oldDog) {
-        return res.status(400).send("Dog id does not exist");
-    }
-
-    if (oldDog.owner.id !== owner.id) {
-        return res.status(400).send("Dog does not exist");
-    }
-
-    const dog = await updateDog(name, dateOfBirth, breed, oldDog)
-
-    return res.status(200).json(dog)
-} )
-
-
-router.patch("/id/:dogid", verifyToken, async (req: any, res: any) => {
-    
-    const owner = await findUser(req.user.email)
-    const dogid = req.params.dogid
-
-    const { name, dob, breed } = req.body;
-
-    // check if already in db
-    const oldDog = await findDogById(dogid)
-    if (!oldDog) {
-        return res.status(400).send("Dog id does not exist");
-    }
-    
-    if (oldDog.owner.id !== owner.id) {
-        return res.status(400).send("Dog does not exist");
-    }
-
-    let dog = oldDog;
-
-    if (name) {
-        dog = await patchDog(oldDog, "name", name)
-    }
-
-    if (dob) {
         // validate date
         const dateOfBirth = new Date(dob);
         if (!(dateOfBirth instanceof Date && !isNaN(dateOfBirth.valueOf()))) {
@@ -156,19 +102,112 @@ router.patch("/id/:dogid", verifyToken, async (req: any, res: any) => {
         if (dateOfBirth.valueOf() > Date.now()) {
             return res.status(400).send("dob cannot be in the future");
         }
-        dog = await patchDog(oldDog, "dob", dateOfBirth)
-    }
 
-    if (breed) {
         // validate breed
         const dogBreed = await Breed.findById(breed)
         if (!dogBreed) {
             return res.status(400).send("Incorect breed");
         }
-        dog = await patchDog(oldDog, "breed", breed)
-    }
 
-    return res.status(200).json(dog)
+        // check if already in db
+        const oldDog = await findDogById(dogid)
+        if (!oldDog) {
+            return res.status(400).send("Dog id does not exist");
+        }
+
+        if (oldDog.owner.id !== owner.id) {
+            return res.status(400).send("Dog does not exist");
+        }
+
+        const dog = await updateDog(name, dateOfBirth, breed, oldDog)
+
+        return res.status(204).json(dog)
+    }
+    catch (e) {
+        console.log(e)
+        return res.status(400).send("Unable to update dog. Please check logs.");
+    }
 } )
+
+
+router.patch("/id/:dogid", verifyToken, async (req: any, res: any) => {
+    try {
+        const owner = await findUser(req.user.email)
+        const dogid = req.params.dogid
+
+        const { name, dob, breed } = req.body;
+
+        // check if already in db
+        const oldDog = await findDogById(dogid)
+        if (!oldDog) {
+            return res.status(400).send("Dog id does not exist");
+        }
+        
+        if (oldDog.owner.id !== owner.id) {
+            return res.status(400).send("Dog does not exist");
+        }
+
+        let dog = oldDog;
+
+        if (name) {
+            dog = await patchDog(oldDog, "name", name)
+        }
+
+        if (dob) {
+            // validate date
+            const dateOfBirth = new Date(dob);
+            if (!(dateOfBirth instanceof Date && !isNaN(dateOfBirth.valueOf()))) {
+                return res.status(400).send("Incorect dob format: required format - yyyy-mm-dd");
+            }
+            if (dateOfBirth.valueOf() > Date.now()) {
+                return res.status(400).send("dob cannot be in the future");
+            }
+            dog = await patchDog(oldDog, "dob", dateOfBirth)
+        }
+
+        if (breed) {
+            // validate breed
+            const dogBreed = await Breed.findById(breed)
+            if (!dogBreed) {
+                return res.status(400).send("Incorect breed");
+            }
+            dog = await patchDog(oldDog, "breed", breed)
+        }
+
+        return res.status(204).json(dog)
+    }
+    catch (e) {
+        console.log(e)
+        return res.status(400).send("Unable to patch dog. Please check logs.");
+    }
+} )
+
+
+router.delete("/id/:dogid", verifyToken, async (req: any, res: any) => {
+    
+    try {
+        const owner = await findUser(req.user.email)
+        const dogid = req.params.dogid
+
+        // check if already in db
+        const dog = await findDogById(dogid)
+        if (!dog) {
+            return res.status(400).send("Dog id does not exist");
+        }
+
+        if (dog.owner.id !== owner.id) {
+            return res.status(400).send("Dog does not exist");
+        }
+
+        dog.delete()
+
+        return res.status(204).json(dog)
+    }
+    catch (e) {
+        console.log(e)
+        return res.status(400).send("Unable to delete dog. Please check logs.");
+    }
+} )
+
 
 export default router;
