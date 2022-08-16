@@ -37,7 +37,6 @@ router.post("/register", async (req, res) => {
 // Login
 router.post("/login", async (req, res) => {
 
-  // Our login logic starts here
   try {
     // Get user input
     const { email, password } = req.body;
@@ -69,7 +68,6 @@ router.post("/login", async (req, res) => {
   } catch (err) {
     console.log(err);
   }
-  // Our register logic ends here
 });
 
 export default router;

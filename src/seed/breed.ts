@@ -1,5 +1,5 @@
 import Breed from '../model/breed'
-import {connect, disconnect} from 'mongoose';
+import {connect} from 'mongoose';
 import dotenv from "dotenv";
 
 // initialize configuration
@@ -18,7 +18,6 @@ const breeds = [
         name: "Pug",
     }),
 ]
-
 
 // save your data
 breeds.map(async (breed, idx) => { 

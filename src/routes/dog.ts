@@ -69,6 +69,7 @@ router.post("/", verifyToken, async (req: any, res) => {
             return res.status(409).send("Dog already exist");
         }
 
+        // create dog
         const dog = await createDog(name, dateOfBirth, breed, owner)
 
         return res.status(201).json(dog)
@@ -84,6 +85,7 @@ router.post("/", verifyToken, async (req: any, res) => {
 router.put("/id/:dogid", verifyToken, async (req: any, res: any) => {
     
     try {
+        // get request data
         const owner = await findUser(req.user.email)
         const dogid = req.params.dogid
 
@@ -119,6 +121,7 @@ router.put("/id/:dogid", verifyToken, async (req: any, res: any) => {
             return res.status(400).send("Dog does not exist");
         }
 
+        // update dog
         const dog = await updateDog(name, dateOfBirth, breed, oldDog)
 
         return res.status(204).json(dog)
@@ -132,6 +135,7 @@ router.put("/id/:dogid", verifyToken, async (req: any, res: any) => {
 
 router.patch("/id/:dogid", verifyToken, async (req: any, res: any) => {
     try {
+        // get request info
         const owner = await findUser(req.user.email)
         const dogid = req.params.dogid
 
