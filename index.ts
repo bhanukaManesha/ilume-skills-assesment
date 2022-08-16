@@ -4,6 +4,7 @@ import express from "express";
 import { connect } from 'mongoose';
 import verifyToken from './src/middleware/auth';
 import authRouter from './src/routes/auth';
+import dogRouter from './src/routes/dog';
 
 // initialize configuration
 dotenv.config();
@@ -18,6 +19,7 @@ const app = express();
 app.use(express.json());
 
 app.use(`/auth`, authRouter);
+app.use(`/dogs`, dogRouter);
 
 // Welcome
 app.get("/welcome", verifyToken, (req, res) => {
