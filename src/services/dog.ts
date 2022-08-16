@@ -30,13 +30,19 @@ export const createDog = async (name: string, dob: Date, breed: any, owner : any
 
 }
 
-export const updateDog = async (name: string, dob: Date, breed: any, oldDog:any) => {
+export const updateDog = async (name: string, dob: Date, breed: any, dog:any) => {
     
-    oldDog.name = name;
-    oldDog.dob = dob;
-    oldDog.breed = breed;
+    dog.name = name;
+    dog.dob = dob;
+    dog.breed = breed;
 
-    return oldDog.save()
+    return dog.save()
+
+}
+
+export const patchDog = async (dog : any, field : any, value : any) => {
+    dog[field] = value
+    return dog.save()
 
 }
 
