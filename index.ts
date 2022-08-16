@@ -2,9 +2,9 @@ import dotenv from "dotenv";
 import express from "express";
 
 import { connect } from 'mongoose';
-import verifyToken from './src/middleware/auth';
 import authRouter from './src/routes/auth';
 import dogRouter from './src/routes/dog';
+import breedRouter from './src/routes/breed';
 
 // initialize configuration
 dotenv.config();
@@ -20,6 +20,7 @@ app.use(express.json());
 
 app.use(`/auth`, authRouter);
 app.use(`/dogs`, dogRouter);
+app.use(`/breeds`, breedRouter);
 
 // Welcome
 app.get("/health", (req, res) => {
