@@ -22,8 +22,8 @@ app.use(`/auth`, authRouter);
 app.use(`/dogs`, dogRouter);
 
 // Welcome
-app.get("/welcome", verifyToken, (req, res) => {
-  return res.status(200).send("Welcome 🙌 ");
+app.get("/health", (req, res) => {
+  return res.status(200).json({"status" : "The API is up and running"});
 });
 
 app.get("/", (req, res) => {
