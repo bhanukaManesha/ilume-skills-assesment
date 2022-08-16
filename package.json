@@ -6,6 +6,7 @@
     "scripts": {
         "clean": "rimraf dist/*",
         "prebuild": "tslint -c tslint.json -p tsconfig.json --fix",
+        "dev": "nodemon index.js",
         "build": "tsc",
         "prestart": "npm run build",
         "start": "node .",
@@ -15,13 +16,20 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
+        "bcryptjs": "^2.4.3",
+        "body-parser": "^1.20.0",
         "dotenv": "^10.0.0",
-        "express": "^4.18.1"
+        "express": "^4.18.1",
+        "jsonwebtoken": "^8.5.1",
+        "module-name": "^0.0.1-security",
+        "mongoose": "^6.5.2"
     },
     "devDependencies": {
+        "@types/bcryptjs": "^2.4.2",
         "@types/dotenv": "^8.2.0",
         "@types/express": "^4.17.13",
         "@types/fs-extra": "^9.0.13",
+        "@types/jsonwebtoken": "^8.5.8",
         "@types/node": "^16.11.49",
         "@types/shelljs": "^0.8.11",
         "fs-extra": "^10.1.0",
