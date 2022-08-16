@@ -2,7 +2,7 @@ import { Request, Response, Router } from 'express';
 import Breed from '../model/breed';
 import verifyToken from '../middleware/auth';
 import { findUser } from '../services/auth';
-import { createDog, findDog, findDogById, getDogsByOwnerID } from '../services/dog';
+import { createDog, findDog, findDogById, getDogsByOwnerID, updateDog } from '../services/dog';
 const router = Router();
 
 router.get("", verifyToken, async (req: any, res: any) => {
@@ -36,7 +36,7 @@ router.post("/", verifyToken, async (req: any, res) => {
 
         // Get user input
         const { name, dob, breed } = req.body;
-        console.log(name, dob, breed)
+        
         // validate user input
         if (!(name && dob && breed)) {
             return res.status(400).send("All input is required");
@@ -44,6 +44,9 @@ router.post("/", verifyToken, async (req: any, res) => {
 
         // validate date
         const dateOfBirth = new Date(dob);
+        if (!(dateOfBirth instanceof Date && !isNaN(dateOfBirth.valueOf()))) {
+            return res.status(400).send("Incorect dob format: required format - yyyy-mm-dd");
+        }
 
         // validate breed
         const dogBreed = await Breed.findById(breed)
@@ -71,12 +74,44 @@ router.post("/", verifyToken, async (req: any, res) => {
         catch (e) {
             console.log(e)
             return res.status(400).send("Unable to create dog. Please check logs.");
-            // if (e instanceof ) {
-            //     return res.status(400).send("Incorect dob format: required format - yyyy-mm-dd");
-            // } else {
-            //     return res.status(400).send("Unable to create dog. Please check logs.");
-            // }
         }
     });
+
+
+router.put("/id/:dogid", verifyToken, async (req: any, res: any) => {
+    
+    const owner = await findUser(req.user.email)
+    const dogid = req.params.dogid
+
+    const { name, dob, breed } = req.body;
+
+    // validate user input
+    if (!(name && dob && breed)) {
+        return res.status(400).send("All input is required");
+    }
+
+    // validate date
+    const dateOfBirth = new Date(dob);
+
+    // validate breed
+    const dogBreed = await Breed.findById(breed)
+    if (!dogBreed) {
+        return res.status(400).send("Incorect breed");
+    }
+
+    // check if already in db
+    const oldDog = await findDogById(dogid)
+    if (!oldDog) {
+        return res.status(400).send("Dog id does not exist");
+    }
+
+    if (oldDog.owner.id !== owner.id) {
+        return res.status(400).send("Dog does not exist");
+    }
+
+    const dog = await updateDog(name, dateOfBirth, breed, oldDog)
+
+    return res.status(200).json(dog)
+} )
 
 export default router;

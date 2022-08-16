@@ -30,6 +30,16 @@ export const createDog = async (name: string, dob: Date, breed: any, owner : any
 
 }
 
+export const updateDog = async (name: string, dob: Date, breed: any, oldDog:any) => {
+    
+    oldDog.name = name;
+    oldDog.dob = dob;
+    oldDog.breed = breed;
+
+    return oldDog.save()
+
+}
+
 export const getDogsByOwnerID = async (ownerid: any) => {
     return Dog.find({"owner" : ownerid})
         .populate({
