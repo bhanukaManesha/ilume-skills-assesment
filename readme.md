@@ -4,6 +4,8 @@
 
 👋 Codebase for the Ilume backend skill assesment test
 
+🚚 The link to the heroku deployment : [https://ilume-backend-service.herokuapp.com/](https://ilume-backend-service.herokuapp.com/)
+
 ## 🧐 Assumptions
 - Each dog will only have one owner
 - Each dog will be one breed
