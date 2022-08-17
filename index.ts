@@ -28,7 +28,7 @@ app.get("/health", (req, res) => {
 });
 
 app.get("/", (req, res) => {
-  return res.status(200).send("Welcome 🙌 ");
+  return res.status(200).send("ilume Back End Skills Test 🚀");
 });
 
 // start the express server
