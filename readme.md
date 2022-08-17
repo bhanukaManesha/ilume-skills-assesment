@@ -19,11 +19,15 @@
 
 ## 💽 How to seed the database
 1. After setting up the project, run `ts-node src/seed/breed.ts` to seed the Breed types into the database.
+Only do this, if the database is a setup fresh. 
 
 ## 🚀 API Documentation
 
-The api documentation is hosted as a postman collection.
+The api documentation is hosted here as a postman collection.
 
+[<img src="https://miro.medium.com/max/802/1*dLWPk_rziSpWhPx1UWONbQ@2x.png" alt="drawing" style="width:200px;"/>](https://documenter.getpostman.com/view/3030509/VUqmuJUF)
 
 ## 🐛 Known Bugs
+- No email and password validation done, only checking whether they are not null.
 - For some errors, the apis return a generic error message such as `Unable to <task>. Please check logs.` These can be better wrapped into pre-defined error categories.
+- Instead of deleteing the dog, we can have another field to specify if the dog is active or not. This allows us to safely delete the dog without dependency issues in the future.
